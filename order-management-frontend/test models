@@ -1,0 +1,70 @@
+// Importing required libraries
+const mongoose = require('mongoose');
+
+// Order Schema
+const OrderSchema = new mongoose.Schema({
+  orderId: { type: String, required: true, unique: true },
+  creator: { type: String, required: true },
+  responsible: { type: String, required: true },
+  company: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+});
+
+// Grade Schema
+const GradeSchema = new mongoose.Schema({
+  grade: { type: String, required: true, unique: true },
+  density: { type: Number, required: true },
+  chemicalComposition: { type: String, required: true },
+});
+
+// Shape Schema
+const ShapeSchema = new mongoose.Schema({
+  shapeId: { type: String, required: true, unique: true },
+});
+
+// Line Item Schema
+const LineItemSchema = new mongoose.Schema({
+  lineItemId: { type: String, required: true, unique: true },
+  orderId: { type: String, required: true, ref: 'Order' },
+  grade: { type: String, required: true, ref: 'Grade' },
+  shape: { type: String, required: true, ref: 'Shape' },
+  length: { type: Number },
+  breadth: { type: Number },
+  thickness: { type: Number },
+  diameter: { type: Number },
+  innerDiameter: { type: Number },
+  outerDiameter: { type: Number },
+  weight: { type: Number },
+});
+
+// Process Schema
+const ProcessSchema = new mongoose.Schema({
+  processId: { type: String, required: true, unique: true },
+});
+
+// Vendor Schema
+const VendorSchema = new mongoose.Schema({
+  vendorId: { type: String, required: true, unique: true },
+  contact: { type: String },
+  location: { type: String },
+});
+
+// LineItemProcess Schema
+const LineItemProcessSchema = new mongoose.Schema({
+  lineItemId: { type: String, required: true, ref: 'LineItem' },
+  processId: { type: String, required: true, ref: 'Process' },
+  vendorId: { type: String, required: true, ref: 'Vendor' },
+  sequence: { type: Number },
+});
+
+// Exporting the Models
+module.exports = {
+  Order: mongoose.model('Order', OrderSchema),
+  Grade: mongoose.model('Grade', GradeSchema),
+  Shape: mongoose.model('Shape', ShapeSchema),
+  LineItem: mongoose.model('LineItem', LineItemSchema),
+  Process: mongoose.model('Process', ProcessSchema),
+  Vendor: mongoose.model('Vendor', VendorSchema),
+  LineItemProcess: mongoose.model('LineItemProcess', LineItemProcessSchema),
+};

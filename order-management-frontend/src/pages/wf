@@ -1,0 +1,121 @@
+import React, { useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+const DraggableList = () => {
+  const [processList, setProcessList] = useState([
+    { id: '1', processId: 'forging', vendorId: 'vendor1', sequence: 1 },
+    { id: '2', processId: 'grinding', vendorId: 'vendor2', sequence: 2 },
+  ]);
+
+  const [newProcess, setNewProcess] = useState({ processId: '', vendorId: '' });
+
+  // Handle drag and drop reordering
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(processList);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    // Update sequence numbers based on new order
+    const updatedProcesses = items.map((item, index) => ({
+      ...item,
+      sequence: index + 1,
+    }));
+
+    setProcessList(updatedProcesses);
+  };
+
+  // Handle adding a new process to the list
+  const handleAddProcess = () => {
+    if (newProcess.processId && newProcess.vendorId) {
+      setProcessList((prev) => [
+        ...prev,
+        {
+          id: (prev.length + 1).toString(),
+          processId: newProcess.processId,
+          vendorId: newProcess.vendorId,
+          sequence: prev.length + 1,
+        },
+      ]);
+      setNewProcess({ processId: '', vendorId: '' }); // Clear input fields
+    }
+  };
+
+  return (
+    <div>
+      <h2>Draggable Process List</h2>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="processList">
+          {(provided) => (
+            <ul
+              className="characters"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              style={{ listStyleType: 'none', padding: 0 }}
+            >
+              {processList.map((item, index) => (
+                <Draggable key={item.id} draggableId={item.id} index={index}>
+                  {(provided) => (
+                    <li
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '10px',
+                        margin: '5px 0',
+                        background: '#f8f8f8',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      <span>
+                        Sequence: {item.sequence}, Process: {item.processId}, Vendor: {item.vendorId}
+                      </span>
+                      <button
+                        onClick={() =>
+                          setProcessList((prev) =>
+                            prev.filter((process) => process.id !== item.id)
+                          )
+                        }
+                        style={{ marginLeft: '10px', color: 'red', border: 'none', background: 'none' }}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ul>
+          )}
+        </Droppable>
+      </DragDropContext>
+
+      <div style={{ marginTop: '20px' }}>
+        <h3>Add New Process</h3>
+        <input
+          type="text"
+          placeholder="Process ID"
+          value={newProcess.processId}
+          onChange={(e) => setNewProcess((prev) => ({ ...prev, processId: e.target.value }))}
+          style={{ marginRight: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Vendor ID"
+          value={newProcess.vendorId}
+          onChange={(e) => setNewProcess((prev) => ({ ...prev, vendorId: e.target.value }))}
+          style={{ marginRight: '10px' }}
+        />
+        <button onClick={handleAddProcess} style={{ padding: '5px 10px', background: 'blue', color: 'white' }}>
+          Add
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default DraggableList;

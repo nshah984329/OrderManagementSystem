@@ -1,0 +1,10 @@
+// Create a new shape
+router.post('/', async (req, res) => {
+  try {
+    const newShape = new Shape(req.body);
+    await newShape.save();
+    res.status(201).json(newShape);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});

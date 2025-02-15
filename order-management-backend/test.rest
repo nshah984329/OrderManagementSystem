@@ -1,0 +1,37 @@
+### Create an Order
+
+GET http://localhost:5045/api/lineitemprocesses/reorder/MM-0001%2F02
+
+{"processIds": ["NIHEER"],"vendorIds": ["wefwe"]}
+
+
+POST http://localhost:5045/api/lineitems
+Content-Type: application/json
+
+{
+  "orderId": "MM-0007",
+  "shape": "Sheet",
+  "grade": "Inconel 718",
+  "dimensions": { "length": 234, "breadth": 232, "thickness": 12, "diameter": null },
+  "quantity": 123,
+  "weight": 235235,
+  "processIds": [],
+  "vendorIds": [],
+  "processId": "NIHEER",
+  "vendorId": "Niheer forges"
+}
+
+
+
+### Get All Orders
+GET http://localhost:5045/api/lineitems
+
+
+POST http://localhost:5045/api/shapes
+Content-Type: application/json
+
+{
+  "shapeId": "Circle"
+}
+
+GET http://localhost:5045/api/shapes

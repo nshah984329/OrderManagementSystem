@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "order-management-frontend"
+		},
+		{
+			"path": "order-management-backend"
+		}
+	],
+	"settings": {
+		"CodeGPT.apiKey": "CodeGPT Plus Beta"
+	}
+}

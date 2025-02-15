@@ -1,0 +1,159 @@
+### Insert Inconel 718
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Inconel 718",
+  "density": 8.19,
+  "chemicalComposition": "Nickel 50-55%, Chromium 17-21%, Iron, Cb+Ta, Mo, Ti, Al"
+}
+
+### Insert Inconel 625
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Inconel 625",
+  "density": 8.44,
+  "chemicalComposition": "Nickel 58%, Chromium 20-23%, Molybdenum 8-10%, Iron, Cb+Ta"
+}
+
+### Insert Inconel X750
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Inconel X750",
+  "density": 8.28,
+  "chemicalComposition": "Nickel 70%, Chromium 14-17%, Iron, Titanium, Aluminium"
+}
+
+### Insert Hastelloy C276
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Hastelloy C276",
+  "density": 8.89,
+  "chemicalComposition": "Nickel 57%, Molybdenum 15-17%, Chromium 14.5-16.5%, Iron, Cobalt"
+}
+
+### Insert Hastelloy C22
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Hastelloy C22",
+  "density": 8.69,
+  "chemicalComposition": "Nickel 56%, Chromium 20-22.5%, Molybdenum 12.5-14.5%, Iron, Cobalt"
+}
+
+### Insert Hastelloy C4
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Hastelloy C4",
+  "density": 8.64,
+  "chemicalComposition": "Nickel 65%, Molybdenum 14-17%, Chromium 14-17%, Iron"
+}
+
+### Insert Monel 400
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Monel 400",
+  "density": 8.80,
+  "chemicalComposition": "Nickel 63%, Copper 28-34%, Iron, Manganese"
+}
+
+### Insert Monel K500
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Monel K500",
+  "density": 8.44,
+  "chemicalComposition": "Nickel 63%, Copper 27-33%, Aluminium 2.3-3.15%, Titanium"
+}
+
+### Insert Alloy 20
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Alloy 20",
+  "density": 8.05,
+  "chemicalComposition": "Nickel 32-38%, Chromium 19-21%, Iron, Molybdenum, Copper"
+}
+
+### Insert Alloy 59
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Alloy 59",
+  "density": 8.60,
+  "chemicalComposition": "Nickel 59%, Chromium 22-24%, Molybdenum 15-16.5%, Iron"
+}
+
+### Insert Alloy 926
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Alloy 926",
+  "density": 8.10,
+  "chemicalComposition": "Nickel 24-26%, Chromium 19-21%, Molybdenum 6-7%, Iron"
+}
+
+### Insert Inconel 600
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Inconel 600",
+  "density": 8.47,
+  "chemicalComposition": "Nickel 72%, Chromium 14-17%, Iron 6-10%"
+}
+
+### Insert Inconel 601
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Inconel 601",
+  "density": 8.11,
+  "chemicalComposition": "Nickel 58-63%, Chromium 21-25%, Iron, Aluminium 1-1.7%"
+}
+
+### Insert Inconel 602
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Inconel 602",
+  "density": 8.23,
+  "chemicalComposition": "Nickel 58-63%, Chromium 25%, Iron, Aluminium, Titanium"
+}
+
+### Insert Inconel 617
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "Inconel 617",
+  "density": 8.36,
+  "chemicalComposition": "Nickel 44.5-61%, Chromium 20-24%, Cobalt, Molybdenum"
+}
+
+### Insert A286
+POST http://localhost:5045/api/grades
+Content-Type: application/json
+
+{
+  "grade": "A286",
+  "density": 7.93,
+  "chemicalComposition": "Nickel 24-27%, Iron, Chromium 13.5-16%, Molybdenum 1-1.5%, Titanium"
+}

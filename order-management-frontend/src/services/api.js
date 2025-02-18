@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5045/api',
+  baseURL: 'http://munani.onrender.com/api',
 });
 
 // Orders

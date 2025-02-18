@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchOrders, createOrder } from '../services/api';
-
+import axios from "axios";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -26,7 +26,7 @@ const OrdersPage = () => {
 
     const fetchNextOrderId = async () => {
       try {
-        const { data } = await API.get('http://localhost:5045/api/orders/nextId');
+        const { data } = await axios.get('http://localhost:5045/api/orders/nextId');
         console.log('Fetched Next Order ID:', data.nextOrderId); // Debug log
         setNextOrderId(data.nextOrderId);
       } catch (err) {

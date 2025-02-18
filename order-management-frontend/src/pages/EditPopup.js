@@ -8,6 +8,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import ExecutionEditPopup from './ExecutionEditPopup'; // ✅ Import ExecutionEditPopup
 import { KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -20,6 +21,8 @@ const EditPopup = ({ lineItem, onClose, onSave }) => {
   const [draggedProcess, setDraggedProcess] = useState(null);
   const [filteredVendors, setFilteredVendors] = useState([]); // Vendors filtered by process
   const [filteredProcesses, setFilteredProcesses] = useState([]); // Processes filtered by vendor
+  const [selectedExecution, setSelectedExecution] = useState(null); // ✅ Execution to be edited
+
 
   useEffect(() => {
     // Fetch initial data for vendors, processes, and line item processes
@@ -110,53 +113,52 @@ useEffect(() => {
 
   // Sensors for drag-and-drop
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 10 } // 👈 Prevent accidental drag
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
   // Sortable item component
-  const SortableItem = ({ id, process }) => {
-    id = process.customId; // Ensure id uses customId  
-    //console.log('SortableItem props:', { id, process });
-
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-      id: id
+  const SortableItem = ({ process }) => {
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ 
+      id: process.customId, 
+      disabled: false // 👈 Prevents buttons from triggering drag
     });
-
-    if (!id || !process) {
-      console.error('SortableItem received undefined id or process:', { id, process });
-      return null;
-    }
     
-
+  
     const handleRemove = async (e) => {
-      e.stopPropagation(); // Prevent drag event from triggering
+      e.stopPropagation(); // ✅ Prevent drag from triggering
+      e.preventDefault(); // ✅ Prevent unintended behavior
+      console.log(`🔴 Removing process: ${process.customId}`);
       try {
-        // Make sure we have both IDs
-        if (!lineItem.lineItemId || !process._id) {
-          console.error('Missing required IDs for deletion');
-          return;
-        }
-
-        console.log('Removing process:', {
-          lineItemId: lineItem.lineItemId,
-          processId: process.customId
-        });
-
-        // Call delete API with the correct IDs
         await deleteLineItemProcess(lineItem.lineItemId, process.customId);
-
-        // Update state after successful deletion
-        setLineItemProcesses(prev =>
-          prev.filter(item => item.customId !== process.customId)
-        );
+        setLineItemProcesses(prev => prev.filter(item => item.customId !== process.customId));
       } catch (err) {
         console.error('Error removing process:', err);
       }
     };
-
+  
+    const handleEditExecution = async (e) => {
+      e.stopPropagation(); // ✅ Prevent drag from triggering
+      e.preventDefault(); // ✅ Prevent unintended behavior
+      console.log(`🟠 Editing Execution for Process: ${process.customId}`);
+      try {
+        const executionDetails = await fetchExecutionDetailsForLineItem(lineItem.lineItemId);
+        const execution = executionDetails.find(exec => exec.processId === process.processId && exec.vendorId === process.vendorId);
+    
+        if (execution) {
+          setSelectedExecution(execution);
+        } else {
+          console.warn("⚠️ No execution details found for this process");
+        }
+      } catch (error) {
+        console.error('Error fetching execution details:', error);
+      }
+    };
+  
     const style = {
       transform: CSS.Transform.toString(transform),
       transition,
@@ -169,7 +171,7 @@ useEffect(() => {
       justifyContent: 'space-between',
       alignItems: 'center',
     };
-
+  
     return (
       <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
         <span>
@@ -177,22 +179,30 @@ useEffect(() => {
           Process: {process.processId},
           Vendor: {process.vendorId}
         </span>
-        <button
-          onClick={handleRemove}
-          style={{
-            marginLeft: '10px',
-            color: 'red',
-            border: 'none',
-            background: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          Remove
-        </button>
+        
+        {/* 🔥 Buttons Should Not Be Draggable */}
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button 
+            onClick={handleEditExecution} 
+            onMouseDown={(e) => e.stopPropagation()} // 👈 Fix: Prevent drag on button
+            onTouchStart={(e) => e.stopPropagation()} // 👈 Fix: Prevent touch drag
+            style={{ background: 'orange', color: 'white', cursor: 'pointer' }}
+          >
+            Edit
+          </button>
+          <button 
+            onClick={handleRemove} 
+            onMouseDown={(e) => e.stopPropagation()} 
+            onTouchStart={(e) => e.stopPropagation()} 
+            style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer' }}
+          >
+            Remove
+          </button>
+        </div>
       </div>
     );
   };
-
+  
   const handleDragEnd = (event) => {
     if (!event || !event.active || !event.over) {
       console.warn('handleDragEnd: Missing active or over:', event);
@@ -200,7 +210,6 @@ useEffect(() => {
     }
   
     const { active, over } = event;
-  
     if (!active.id || !over.id) {
       console.warn('handleDragEnd: Missing ID in active or over:', { active, over });
       return;
@@ -211,7 +220,6 @@ useEffect(() => {
     setLineItemProcesses((items) => {
       const oldIndex = items.findIndex((item) => item.customId === active.id);
       const newIndex = items.findIndex((item) => item.customId === over.id);
-      
   
       if (oldIndex === -1 || newIndex === -1) {
         console.warn('handleDragEnd: Invalid indices:', { oldIndex, newIndex });
@@ -364,7 +372,16 @@ useEffect(() => {
     }
   };
   
-  
+  const handleExecutionSave = (updatedExecution) => {
+    setLineItemProcesses(prev =>
+      prev.map(process =>
+        process.processId === updatedExecution.processId && process.vendorId === updatedExecution.vendorId
+          ? { ...process, ...updatedExecution }
+          : process
+      )
+    );
+    setSelectedExecution(null);
+  };
   
   return (
     <div className="popup">
@@ -444,8 +461,12 @@ useEffect(() => {
         </div>
       </div>
     </div>
+    {selectedExecution && <ExecutionEditPopup execution={selectedExecution} onClose={() => setSelectedExecution(null)} onSave={handleExecutionSave} />}
+
     </div>
   );
 };
 
 export default EditPopup;
+
+

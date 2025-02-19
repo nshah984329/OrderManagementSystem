@@ -515,7 +515,8 @@ const handleShapeChange = (e) => {
       <h2>Existing Line Items</h2>
       
       {fetchedLineItems.length > 0 ? (
-        <table>
+        <div className="table-container">
+        <table className="responsive-table">
           
           <thead>
             <tr>
@@ -535,37 +536,43 @@ const handleShapeChange = (e) => {
                 <td>{item.lineItemId || 'Unknown'}</td>
                 <td>{item.shape || 'N/A'}</td>
                 <td>{item.grade || 'N/A'}</td>
-                <td>
-  {item.dimensions
-    ? Object.entries(item.dimensions)
-        .filter(([_, value]) => value && value !== 'N/A') // Filter out keys with N/A or empty values
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(', ')
-    : 'N/A'}
-</td>
+          {/* Dimensions with comma separator */}
+          <td>
+            {item.dimensions
+              ? Object.entries(item.dimensions)
+                  .filter(([_, value]) => value && value !== 'N/A')
+                  .map(([key, value]) => `${key}: ${value}`)
+                  .join(', ')
+              : 'N/A'}
+          </td>
 
-                <td>{item.quantity || 'N/A'}</td>
-                <td>{item.weight || 'N/A'}</td>
-                <td>
-                  {Array.isArray(item.processIds)
-                    ? item.processIds.join(', ') // Show all selected processIds
-                    : 'N/A'}
-                </td>
-                <td>
-                  {Array.isArray(item.vendorIds)
-                    ? item.vendorIds.join(', ') // Show all selected vendorIds
-                    : 'N/A'}
-                </td>
-                <td>
-        <button onClick={() => handleEditLineItem(item)}>Edit</button>
-      </td> 
-      <td>
-        <button onClick={() => handleDeleteLineItem(item.lineItemId)}>Delete</button>
-      </td>
+          <td>{item.quantity ? `${item.quantity} nos` : 'N/A'}</td>
+<td>{item.weight ? `${item.weight} kg` : 'N/A'}</td>
+
+
+
+          {/* Processes with comma separator */}
+          <td>
+            {Array.isArray(item.processIds) && item.processIds.length > 0
+              ? item.processIds.join(', ')
+              : 'N/A'}
+          </td>
+
+          {/* Vendors with comma separator */}
+          <td>
+            {Array.isArray(item.vendorIds) && item.vendorIds.length > 0
+              ? item.vendorIds.join(', ')
+              : 'N/A'}
+          </td>
+          <td className="action-buttons">
+  <button className="edit-btn" onClick={() => handleEditLineItem(item)}>Edit</button>
+  <button className="delete-btn" onClick={() => handleDeleteLineItem(item.lineItemId)}>Delete</button>
+</td>
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       ) : (
         <p>No line items available</p>
       )}

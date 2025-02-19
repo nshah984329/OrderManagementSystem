@@ -2,7 +2,9 @@
 import axios from 'axios';
 
 const API = axios.create({
+ // baseURL: process.env.REACT_APP_API_BASE_URL_local, 
   baseURL: process.env.REACT_APP_API_BASE_URL, // for React
+  // for React
   // baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // for Next.js
   headers: {
       'Content-Type': 'application/json'

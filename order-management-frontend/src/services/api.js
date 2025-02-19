@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://munani.onrender.com/api',
+  baseURL: 'http://munani.onrender.com',
 });
 
 // Orders

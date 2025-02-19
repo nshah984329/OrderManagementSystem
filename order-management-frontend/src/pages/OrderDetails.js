@@ -60,7 +60,7 @@ const OrderDetails = () => {
         console.log('Fetched Line Items:', lineItemData);
         setLineItems(lineItemData);
         setfetchedLineItems(lineItemData.data);
-        const { data } = await axios.get(`http://localhost:5045/api/lineitems/nextLineItemId/${id}`);
+        const { data } = await axios.get(`https://munani.onrender.com/api/lineitems/nextLineItemId/${id}`);
         setNextLineItemId(data.nextLineItemId);
       } catch (err) {
         console.error('Error fetching data:', err.message);
@@ -162,7 +162,7 @@ const OrderDetails = () => {
       const lineItemData = await fetchLineItems(id);
       setLineItems(lineItemData);
       // Fetch next lineItemId for subsequent additions
-      const { data } = await axios.get(`http://localhost:5045/api/lineitems/nextLineItemId/${id}`);
+      const { data } = await axios.get(`https://munani.onrender.com/api/lineitems/nextLineItemId/${id}`);
       setNextLineItemId(data.nextLineItemId);
     } catch (err) {
       console.error('Failed to add line item:', err.response?.data || err.message);

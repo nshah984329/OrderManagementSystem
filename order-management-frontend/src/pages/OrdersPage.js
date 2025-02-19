@@ -26,7 +26,7 @@ const OrdersPage = () => {
 
     const fetchNextOrderId = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5045/api/orders/nextId');
+        const { data } = await axios.get('https://munani.onrender.com/api/orders/nextId');
         console.log('Fetched Next Order ID:', data.nextOrderId); // Debug log
         setNextOrderId(data.nextOrderId);
       } catch (err) {
